@@ -2,7 +2,7 @@ import io
 from distutils.core import setup
 
 
-with io.open('README.rst', encoding='utf8') as _f:
+with io.open('README.md', encoding='utf8') as _f:
     long_description = _f.read().strip()
 
 setup(
