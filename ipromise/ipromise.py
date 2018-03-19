@@ -1,4 +1,4 @@
-__all__ = ['AbstractBaseClass', 'implements']
+__all__ = ['AbstractBaseClass']
 
 
 class AbstractBaseClass:
@@ -19,8 +19,9 @@ class AbstractBaseClass:
                     abstracts.add(name)
         cls.__abstractmethods__ = frozenset(abstracts)
 
-        # Check that all of the methods implementing pure virtual methods do
-        # so.
+        # Check that each method M implementing a method in class C:
+        # * C is a base class, and
+        # * overrides a virtual method.
         for name, value in vars(cls).items():
             if not hasattr(value, "__implemented_from__"):
                 continue
@@ -36,24 +37,22 @@ class AbstractBaseClass:
                     raise TypeError(f"{name} is already implemented "
                                     f"in base class {base.__name__}")
 
-
-def implements(interface_class):
-
-    if not isinstance(interface_class, type):
-        raise TypeError
-
-    def decorated_method(method):
-        if method.__name__ not in vars(interface_class):
-            raise TypeError(
-                f"{method.__name__} not found in interface class "
-                f"{interface_class.__name__}")
-        if not getattr(getattr(interface_class, method.__name__),
-                       "__isabstractmethod__",
-                       False):
-            raise TypeError(
-                f"{method.__name__} in {interface_class.__name__} "
-                "is not abstract")
-        method.__implemented_from__ = interface_class
-        return method
-
-    return decorated_method
+        # Check that each method M overriding a method in class C:
+        # * C is a base class, and
+        # * overrides a non-virtual method.
+        for name, value in vars(cls).items():
+            if not hasattr(value, "__overrides_from__"):
+                continue
+            interface_class = getattr(value, "__overrides_from__")
+            if not issubclass(cls, interface_class):
+                raise TypeError(f"Interface class {interface_class.__name__} "
+                                f"is not a base class of {cls.__name__}")
+            for base in cls.__bases__:
+                if not hasattr(base, name):
+                    continue
+                bases_value = getattr(base, name)
+                if getattr(bases_value, "__isabstractmethod__", False):
+                    raise TypeError(
+                        f"{name} is abstract in base class {base.__name__}, "
+                        f"so it should be marked as implemented rather than "
+                        f"overridden.")
