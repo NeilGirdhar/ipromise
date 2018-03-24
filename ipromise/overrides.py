@@ -8,9 +8,6 @@ def overrides(interface_class):
     if not isinstance(interface_class, type):
         raise TypeError
 
-    if not issubclass(interface_class, AbstractBaseClass):
-        raise TypeError
-
     def decorated_method(method):
         if method.__name__ not in vars(interface_class):
             raise TypeError(
