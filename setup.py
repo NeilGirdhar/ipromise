@@ -3,12 +3,12 @@ from setuptools import find_packages, setup
 
 setup(
     name='ipromise',
-    version='0.6',
+    version='0.65',
     description='A Python base class that provides various decorators for specifying promises relating to inheritance.',
     author='Neil Girdhar',
     author_email='mistersheik@gmail.com',
     url='https://github.com/NeilGirdhar/ipromise',
-    download_url='https://github.com/neilgirdhar/ipromise/archive/0.6.tar.gz',
+    download_url='https://github.com/neilgirdhar/ipromise/archive/0.65.tar.gz',
     packages=find_packages(),
     classifiers=[
         "Development Status :: 5 - Production/Stable",
