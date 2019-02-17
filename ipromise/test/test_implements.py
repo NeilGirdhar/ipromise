@@ -26,7 +26,6 @@ class B(A):
 
 
 def test_implements():
-    B()
 
     with pytest.raises(TypeError):
         # f in B is not abstract
