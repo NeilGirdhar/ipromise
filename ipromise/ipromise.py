@@ -55,7 +55,6 @@ class AbstractBaseClass:
                 raise TypeError(f"Interface class {interface_class.__name__} "
                                 f"is not a base class of {cls.__name__}")
 
-            abstract_bases = {}
             for base in cls.__bases__:
                 if not hasattr(base, name):
                     continue
@@ -68,7 +67,37 @@ class AbstractBaseClass:
                             f"but the base class {base.__name__} already "
                             f"implements it without inheriting from "
                             f"{interface_class.__name__}")
+                    if (hasattr(bases_value, '__overrides_from__')
+                            and (bases_value.__overrides_from__
+                                 != interface_class)):
+                        raise TypeError(
+                            f"the method {name} is supposed to override a "
+                            f"method defined in {interface_class.__name__}, "
+                            f"but the base class {base.__name__} already "
+                            f"overrides it from "
+                            f"{bases_value.__overrides_from__}")
+                    if (hasattr(bases_value, '__implemented_from__')
+                            and (bases_value !=
+                                 getattr(interface_class, name))):
+                        raise TypeError(
+                            f"the method {name} is supposed to override a "
+                            f"method defined in {interface_class.__name__}, "
+                            f"but the base class {base.__name__} already "
+                            f"implements it from "
+                            f"{bases_value.__implemented_from__}")
                 # M can be abstract in B even if B inherits from C since
                 # you are allowed to override abstract methods since a method
                 # can be abstract and have a reasonable definition.  For
                 # example, AbstractContextManager.__exit__.
+
+        for name, value in vars(cls).items():
+            if not hasattr(value, "__overridable__"):
+                continue
+            if hasattr(value, "__implemented_from__"):
+                continue
+            for base in cls.__bases__:
+                if hasattr(base, name):
+                    raise TypeError(
+                        f"the method {name} was marked overridable, but "
+                        f"the base class {base.__name__} already "
+                        f"defines it")
