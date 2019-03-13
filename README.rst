@@ -6,8 +6,8 @@ ipromise
 
 A Python base class that provides various decorators for specifying promises relating to inheritance.
 
-It provides the decorator ``overridable``, which indicates that inheriting
-classes that define this method
+It provides the decorator ``overridable``, which indicates that inheriting classes that define this method
+
 - must decorate their method overriddes with ``overrides``, and
 - must call super within their method definition::
 
