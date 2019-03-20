@@ -16,6 +16,14 @@ class AlsoHasAbstractMethod(AbstractBaseClass):
 
 # Tests from ipromise.py.
 # -----------------------------------------------------------------------------
+def test_implements() -> None:
+    class X(AlsoHasAbstractMethod):
+        @implements(AlsoHasAbstractMethod)
+        def f(self):
+            pass
+    X()
+
+
 def test_implements_interface_is_not_a_base() -> None:
     with pytest.raises(TypeError):
         class X(HasAbstractMethod):

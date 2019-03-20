@@ -21,6 +21,23 @@ class OverridesImplementedAbstractMethod(ImplementsAbstractMethod):
         return 1
 
 
+class AbstractBaseClassHasAbstractMethod(AbstractBaseClass):
+
+    @abstractmethod
+    def f(self):
+        raise NotImplementedError
+
+
+class AbstractBaseClassHasNone(AbstractBaseClass):
+
+    f = None
+
+
+class AbstractBaseClassNoMethods(AbstractBaseClass):
+
+    pass
+
+
 # Tests from ipromise.py.
 # -----------------------------------------------------------------------------
 def test_overrides_from_other_class() -> None:
@@ -99,7 +116,7 @@ def test_decorated_twice() -> None:
 
 
 def test_not_found() -> None:
-    with pytest.raises(TypeError):
+    with pytest.raises(NotImplementedError):
         # Not found in interface class.
         class X(HasRegularMethod):
             @overrides(HasRegularMethod)
@@ -122,3 +139,38 @@ def test_overrides_abstractmethod() -> None:
             @overrides(HasAbstractMethod)
             def f(self) -> int:
                 return 1
+
+
+def test_cannot_instantiate_abstract_class() -> None:
+    # self test: TypeError … Can not instantiate abstract class …
+    with pytest.raises(TypeError):
+        AbstractBaseClassHasAbstractMethod()
+
+
+def test_cannot_implements_overrides_of_abstractmethod() -> None:
+    # TypeError method is abstract in interface class …
+    with pytest.raises(TypeError):
+        class X(AbstractBaseClassHasAbstractMethod):
+            @implements(AbstractBaseClassHasAbstractMethod)
+            @overrides(AbstractBaseClassHasAbstractMethod)
+            def f(self):
+                pass
+        X()
+
+
+def test_overrides_none_method_notimplementederror() -> None:
+    # NotImplementedError … expected implemented type …
+    with pytest.raises(NotImplementedError):
+        class X(AbstractBaseClassHasNone):
+            @overrides(AbstractBaseClassHasNone)
+            def f(self):
+                pass
+
+
+def test_overrides_no_method_notimplementederror() -> None:
+    # NotImplementedError … not implemented …
+    with pytest.raises(NotImplementedError):
+        class X(AbstractBaseClassNoMethods):
+            @overrides(AbstractBaseClassNoMethods)
+            def f(self):
+                pass
