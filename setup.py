@@ -5,6 +5,7 @@ setup(
     name='ipromise',
     version='0.75',
     description='A Python base class that provides various decorators for specifying promises relating to inheritance.',
+    long_description_content_type='text/x-rst',
     author='Neil Girdhar',
     author_email='mistersheik@gmail.com',
     url='https://github.com/NeilGirdhar/ipromise',
