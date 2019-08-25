@@ -1,12 +1,11 @@
-from .ipromise import AbstractBaseClass
-
 __all__ = ['implements']
 
 
 def implements(interface_class):
 
     if not isinstance(interface_class, type):
-        raise TypeError
+        raise TypeError(
+            f"interface class {interface_class} is not a type")
 
     def decorated_method(method):
         if method.__name__ not in vars(interface_class):
