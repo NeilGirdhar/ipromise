@@ -12,7 +12,7 @@ It provides three inheritance patterns:
 * overriding.
 
 Implementing
-===
+============
 Implementing is the pattern whereby an inheriting class's method implements an abstract method from a base class method.
 It is declared using the decorators:
 
@@ -35,7 +35,7 @@ For example::
             return 0
 
 Augmenting
-===
+==========
 Augmenting is the pattern whereby an inheriting class's method calls a base class method.
 This pattern is typical in multiple inheritance whereby mixins provide additional behavior.
 It is declared using two decorators:
@@ -68,7 +68,7 @@ For example::
             return super().f(**kwargs)
 
 Overriding
-===
+==========
 Overriding is the pattern whereby an inheriting class's method calls a base class method.
 This pattern indicates that the base class method is hidden (at least in some cases).
 It is declared using the decorator ``overrides``, which indicates that this is an overriding method.
