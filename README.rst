@@ -5,15 +5,44 @@ ipromise
     :target: https://badge.fury.io/py/ipromise
 
 A Python base class that provides various decorators for specifying promises relating to inheritance.
+It provides four method decorators:
+* ``augments``,
+* ``overrides``,
+* ``implements``, and
+* ``must_agugment``.
 
-It provides the decorator ``overridable``, which indicates that inheriting
-classes that define this method
-* must decorate their method overriddes with ``overrides``, and
-* must call super within their method definition::
+``must_agugment`` indicates that classes that define this method
+must decorate their method overriddes with ``augments``.
+
+``augments`` indicates that this method call super within its definition and thus augments the behavior of the base class method::
 
     class A:
 
-        @overridable
+        @must_augment  # This optional line prevents instantiation if this method is not augmented.
+        def f(self):
+            return 0
+
+
+    class B(A):
+
+        @augments(A)
+        def f(self, extra=0, **kwargs):
+            return super().f(**kwargs) + extra
+
+
+    class C(A):
+
+        @augments(A)
+        def f(self, **kwargs):
+            print("f has been called")
+            return super().f(**kwargs)
+
+This pattern is typical in multiple inheritance whereby many mixins can provide additional behavior.
+
+``overrides`` indicates that this is an overriding method.  This pattern indicates that the base class method is hidden::
+
+    class A:
+
         def f(self):
             return 0
 
@@ -22,10 +51,9 @@ classes that define this method
 
         @overrides(A)
         def f(self):
-            return super().f() + 1
+            return 23
 
-It provides the decorator ``implements``, which indicates that a method
-implements an abstract method in a base class::
+``implements`` indicates that a method implements an abstract method in a base class::
 
     class A:
 
