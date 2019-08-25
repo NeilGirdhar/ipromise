@@ -40,6 +40,10 @@ must decorate their method overriddes with ``augments``.
 This pattern is typical in multiple inheritance whereby many mixins can provide additional behavior.
 
 ``overrides`` indicates that this is an overriding method.  This pattern indicates that the base class method is hidden::
+It provides the decorator ``overridable``, which indicates that inheriting classes that define this method
+
+- must decorate their method overriddes with ``overrides``, and
+- must call super within their method definition::
 
     class A:
 
