@@ -1,62 +1,58 @@
 from abc import abstractmethod
 
 import pytest
+
 from ipromise import AbstractBaseClass, implements
 
-
-class Z(AbstractBaseClass):
-
-    @abstractmethod
-    def f(self):
-        raise NotImplementedError
+from .common import HasAbstractMethod, ImplementsAbstractMethod
 
 
-class A(AbstractBaseClass):
+class AlsoHasAbstractMethod(AbstractBaseClass):
 
     @abstractmethod
     def f(self):
         raise NotImplementedError
 
 
-class B(A):
-
-    @implements(A)
-    def f(self):
-        return 2 + super().f()
-
-
-def test_implements():
-
+# Tests from ipromise.py.
+# -----------------------------------------------------------------------------
+def test_implements_interface_is_not_a_base():
     with pytest.raises(TypeError):
-        # f in B is not abstract
-        class C(A):
-            @implements(B)
+        class X(HasAbstractMethod):
+            @implements(AlsoHasAbstractMethod)
             def f(self):
                 pass
 
+
+def test_is_already_implmented_in_base():
     with pytest.raises(TypeError):
-        # f is already implemented in base class B
-        class C(B):
-            @implements(A)
+        class X(ImplementsAbstractMethod):
+            @implements(HasAbstractMethod)
             def f(self):
                 pass
 
-    with pytest.raises(TypeError):
-        class C(A):
-            # Interface class Z is not a base class of C
-            @implements(Z)
-            def f(self):
-                pass
 
+# Tests from implements.py.
+# -----------------------------------------------------------------------------
+def test_interface_is_not_a_type():
     with pytest.raises(TypeError):
-        class C(A):
+        class X(HasAbstractMethod):
             @implements(None)
             def f(self):
                 pass
 
+
+def test_implements_not_found_in_interface():
     with pytest.raises(TypeError):
-        class C(A):
-            # g not found in interace class A
-            @implements(A)
+        class X(HasAbstractMethod):
+            @implements(HasAbstractMethod)
             def g(self):
+                pass
+
+
+def test_implements_non_abstract_method():
+    with pytest.raises(TypeError):
+        class X(HasAbstractMethod):
+            @implements(ImplementsAbstractMethod)
+            def f(self):
                 pass

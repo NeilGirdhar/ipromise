@@ -13,7 +13,7 @@ It provides three inheritance patterns:
 * overriding.
 
 Implementing
-===
+============
 Implementing is the pattern whereby an inheriting class's method implements an abstract method from a base class method.
 It is declared using the decorators:
 
@@ -22,21 +22,21 @@ It is declared using the decorators:
 
 For example::
 
-    class A:
+    class HasAbstractMethod(AbstractBaseClass):
 
         @abstractmethod
         def f(self):
             raise NotImplementedError
 
 
-    class B(A):
+    class ImplementsAbstractMethod(HasAbstractMethod):
 
-        @implements(A)
+        @implements(HasAbstractMethod)
         def f(self):
             return 0
 
 Augmenting
-===
+==========
 Augmenting is the pattern whereby an inheriting class's method calls a base class method.
 This pattern is typical in multiple inheritance whereby mixins provide additional behavior.
 It is declared using two decorators:
@@ -46,43 +46,44 @@ It is declared using two decorators:
 
 For example::
 
-    class A:
+    class HasMustAugmentMethod(AbstractBaseClass):
 
         @must_augment
         def f(self):
-            self.times_f_called += 1  # must_augment prevents this behavior from being lost.
+            # must_augment prevents this behavior from being lost.
+            self.times_f_called += 1
             return 0
 
 
-    class B(A):
+    class AugmentsMethod(HasMustAugmentMethod):
 
-        @augments(A)
+        @augments(HasMustAugmentMethod)
         def f(self, extra=0, **kwargs):
             return super().f(**kwargs) + extra
 
 
-    class C(A):
+    class AlsoAugmentsMethod(HasMustAugmentMethod):
 
-        @augments(A)
+        @augments(HasMustAugmentMethod)
         def f(self, **kwargs):
             print("f has been called")
             return super().f(**kwargs)
 
 Overriding
-===
+==========
 Overriding is the pattern whereby an inheriting class's method calls a base class method.
 This pattern indicates that the base class method is hidden (at least in some cases).
 It is declared using the decorator ``overrides``, which indicates that this is an overriding method.
 Such a method could call super, but does not have to::
 
-    class A:
+    class HasRegularMethod(AbstractBaseClass):
 
         def f(self):
-            return 0
+            return 1
 
 
-    class B(A):
+    class OverridesRegularMethod(HasRegularMethod):
 
-        @overrides(A)
+        @overrides(HasRegularMethod)
         def f(self):
-            return 23
+            return 2

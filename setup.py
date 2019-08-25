@@ -4,7 +4,8 @@ from setuptools import find_packages, setup
 setup(
     name='ipromise',
     version='0.75',
-    description='A Python base class that provides various decorators for specifying promises relating to inheritance.',
+    description=('A Python base class that provides various decorators for '
+                 'specifying promises relating to inheritance.'),
     long_description_content_type='text/x-rst',
     author='Neil Girdhar',
     author_email='mistersheik@gmail.com',

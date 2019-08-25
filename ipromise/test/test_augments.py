@@ -1,103 +1,108 @@
-from abc import abstractmethod
-
 import pytest
-from ipromise import AbstractBaseClass, implements, overrides, overridable
+
+from ipromise import AbstractBaseClass, augments, must_augment, overrides
+
+from .common import HasAbstractMethod, HasRegularMethod
 
 
-class A(AbstractBaseClass):
+class HasMustAugmentMethod(AbstractBaseClass):
 
-    @abstractmethod
+    @must_augment
     def f(self):
-        raise NotImplementedError
-
-
-class B(A):
-
-    @overridable
-    @implements(A)
-    def f(self):
+        # must_augment prevents this behavior from being lost.
+        self.times_f_called += 1
         return 0
 
-class C(B):
 
-    @abstractmethod
-    def f(self):
-        raise NotImplementedError
+class AugmentsMethod(HasMustAugmentMethod):
 
-
-class D(AbstractBaseClass):
-
-    def f(self):
-        return 1
+    @augments(HasMustAugmentMethod)
+    def f(self, extra=0, **kwargs):
+        return super().f(**kwargs) + extra
 
 
-class E(B):
-    @overrides(B)
-    def f(self):
-        return 1
+class AlsoAugmentsMethod(HasMustAugmentMethod):
+
+    @augments(HasMustAugmentMethod)
+    def f(self, **kwargs):
+        print("f has been called")
+        return super().f(**kwargs)
 
 
 # Tests from ipromise.py.
 # -----------------------------------------------------------------------------
-def test_not_a_base_class():
-    with pytest.raises(TypeError):
-        class X(A):
-            @overrides(B)
-            def f(self):
-                return 1
-
-def test_somehow_abstract():
-    # Somehow abstract in base class.
-    class Y(C):
-        @overrides(B)
+def test_must_agument_hides():
+    class Y(AbstractBaseClass):
         def f(self):
-            return 1
+            pass
 
-def test_already_implemented():
     with pytest.raises(TypeError):
-        # Already implemented in base class that does not inherit from B.
-        class Z(B, D):
-            @overrides(B)
+        class X(HasMustAugmentMethod, Y):
+            pass
+
+
+# Tests from augments.py.
+# -----------------------------------------------------------------------------
+def test_decorated_twice_ma():
+    with pytest.raises(TypeError):
+        # Not found in interface class.
+        class X(HasRegularMethod):
+            @must_augment
+            @augments(HasRegularMethod)
             def f(self):
                 return 1
 
-# Tests from overrides.py.
-# -----------------------------------------------------------------------------
+
+def test_decorated_twice_mo():
+    with pytest.raises(TypeError):
+        # Not found in interface class.
+        class X(HasRegularMethod):
+            @must_augment
+            @overrides(HasRegularMethod)
+            def f(self):
+                return 1
+
+
+def test_interface_is_not_a_type():
+    with pytest.raises(TypeError):
+        class X(HasAbstractMethod):
+            @overrides(None)
+            def f(self):
+                pass
+
+
+def test_decorated_twice_am():
+    with pytest.raises(TypeError):
+        # Not found in interface class.
+        class X(HasRegularMethod):
+            @augments(HasRegularMethod)
+            @must_augment
+            def f(self):
+                return 1
+
+
 def test_not_found():
     with pytest.raises(TypeError):
         # Not found in interface class.
-        class V(B):
-            @overrides(B)
+        class X(HasRegularMethod):
+            @augments(HasRegularMethod)
             def g(self):
                 return 1
 
-def test_is_abstract():
-    # Is abstract in interface class.
-    class W(B):
-        @overrides(B)
-        def f(self):
-            return 1
 
-def test_override_an_override():
+def test_augments_an_augmented():
     with pytest.raises(TypeError):
         # Overrides an override.
-        class U(E):
-            @overrides(E)
+        class X(AugmentsMethod):
+            @augments(AugmentsMethod)
             def f(self):
                 return 1
 
-def test_overrides_and_implemented():
 
+def test_augments_regular_method():
     with pytest.raises(TypeError):
-        class S(B):
-            @overrides(A)
-            def f(self):
-                return 1
-
-def test_overridable_despite_base_class():
-
-    with pytest.raises(TypeError):
-        class T(B):
-            @overridable
+        # Overrides an override.
+        class X(HasRegularMethod):
+            @augments(HasRegularMethod)
             def f(self):
                 return 1

@@ -20,6 +20,20 @@ class AbstractBaseClass:
                     abstracts.add(name)
         cls.__abstractmethods__ = frozenset(abstracts)
 
+        # Check that abstract and must_override methods do not hide methods.
+        all_marked = {}
+        for base in cls.__mro__:
+            for name, value in vars(base).items():
+                if name in all_marked:
+                    raise TypeError(
+                        f"When defining class {cls}, "
+                        f"method {name} in base class {all_marked[name]} "
+                        f"hides members in base class {base}")
+
+                if (getattr(value, "__isabstractmethod__", False)
+                        or getattr(value, "__must_augment__", False)):
+                    all_marked[name] = base
+
         # Check that for each method M implementing a method in class C:
         # * C is a base class of cls, and
         # * for all base classes B that define M,
@@ -75,7 +89,7 @@ class AbstractBaseClass:
                             f"method defined in {interface_class.__name__}, "
                             f"but the base class {base.__name__} already "
                             f"overrides it from "
-                            f"{bases_value.__overrides_from__}")
+                            f"{bases_value.__overrides_from__.__name__}")
                     if (hasattr(bases_value, '__implemented_from__')
                             and (bases_value !=
                                  getattr(interface_class, name))):
@@ -84,20 +98,20 @@ class AbstractBaseClass:
                             f"method defined in {interface_class.__name__}, "
                             f"but the base class {base.__name__} already "
                             f"implements it from "
-                            f"{bases_value.__implemented_from__}")
+                            f"{bases_value.__implemented_from__.__name__}")
                 # M can be abstract in B even if B inherits from C since
                 # you are allowed to override abstract methods since a method
                 # can be abstract and have a reasonable definition.  For
                 # example, AbstractContextManager.__exit__.
 
         for name, value in vars(cls).items():
-            if not hasattr(value, "__overridable__"):
+            if not hasattr(value, "__must_augment__"):
                 continue
             if hasattr(value, "__implemented_from__"):
                 continue
-            for base in cls.__bases__:
+            for base in cls.__mro__[1:]:
                 if hasattr(base, name):
                     raise TypeError(
-                        f"the method {name} was marked overridable, but "
+                        f"the method {name} was marked must_augment, but "
                         f"the base class {base.__name__} already "
                         f"defines it")
