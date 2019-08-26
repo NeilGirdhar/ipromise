@@ -35,10 +35,12 @@ def augments(interface_class):
                 f"the interface class {interface_class.__name__}, "
                 f"but that method augments from a higher-level interface "
                 f"class {getattr(bases_value, '__augments_from__')}")
-        if not hasattr(bases_value, '__must_augment__'):
-            raise TypeError(
-                f"{method.__name__} is not decorated must_augment in "
-                f"the interface class {interface_class.__name__}")
+        # You are allowed to augment methods that are not marked must_augment
+        # since we need this for augmenting the standard library.
+#       if not hasattr(bases_value, '__must_augment__'):
+#           raise TypeError(
+#               f"{method.__name__} is not decorated must_augment in "
+#               f"the interface class {interface_class.__name__}")
         # You are allowed to augment abstract methods since, unfortunately, a
         # method can be abstract and have a reasonable definition.  For
         # example, AbstractContextManager.__exit__.
