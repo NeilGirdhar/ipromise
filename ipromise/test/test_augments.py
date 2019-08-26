@@ -29,6 +29,12 @@ class AlsoAugmentsMethod(HasMustAugmentMethod):
         return super().f(**kwargs)
 
 
+class AugmentsRegularMethod(HasRegularMethod):
+    @augments(HasRegularMethod)
+    def f(self):
+        return 1
+
+
 # Tests from ipromise.py.
 # -----------------------------------------------------------------------------
 def test_must_agument_hides():
@@ -45,7 +51,6 @@ def test_must_agument_hides():
 # -----------------------------------------------------------------------------
 def test_decorated_twice_ma():
     with pytest.raises(TypeError):
-        # Not found in interface class.
         class X(HasRegularMethod):
             @must_augment
             @augments(HasRegularMethod)
@@ -55,7 +60,6 @@ def test_decorated_twice_ma():
 
 def test_decorated_twice_mo():
     with pytest.raises(TypeError):
-        # Not found in interface class.
         class X(HasRegularMethod):
             @must_augment
             @overrides(HasRegularMethod)
@@ -73,7 +77,6 @@ def test_interface_is_not_a_type():
 
 def test_decorated_twice_am():
     with pytest.raises(TypeError):
-        # Not found in interface class.
         class X(HasRegularMethod):
             @augments(HasRegularMethod)
             @must_augment
@@ -83,7 +86,6 @@ def test_decorated_twice_am():
 
 def test_not_found():
     with pytest.raises(TypeError):
-        # Not found in interface class.
         class X(HasRegularMethod):
             @augments(HasRegularMethod)
             def g(self):
@@ -92,17 +94,7 @@ def test_not_found():
 
 def test_augments_an_augmented():
     with pytest.raises(TypeError):
-        # Overrides an override.
         class X(AugmentsMethod):
             @augments(AugmentsMethod)
-            def f(self):
-                return 1
-
-
-def test_augments_regular_method():
-    with pytest.raises(TypeError):
-        # Overrides an override.
-        class X(HasRegularMethod):
-            @augments(HasRegularMethod)
             def f(self):
                 return 1

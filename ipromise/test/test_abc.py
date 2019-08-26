@@ -63,7 +63,6 @@ def test_abstractmethod_hiding_by_inheritance():
         def f(self):
             raise NotImplementedError
 
-
     with pytest.raises(TypeError):
         class Z(Y, HasAbstractMethod):
             pass
