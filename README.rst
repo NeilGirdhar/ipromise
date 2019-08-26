@@ -1,7 +1,6 @@
 ========
 ipromise
 ========
-
 .. image:: https://badge.fury.io/py/ipromise.svg
     :target: https://badge.fury.io/py/ipromise
 
