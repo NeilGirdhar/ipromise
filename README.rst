@@ -8,12 +8,12 @@ A Python base class that provides various decorators for specifying promises rel
 It provides three inheritance patterns:
 
 * implementing,
-* augmenting, and
-* overriding.
+* overriding, and
+* augmenting.
 
 Implementing
 ============
-Implementing is the pattern whereby an inheriting class's method implements an abstract method from a base class method.
+*Implementing* is the pattern whereby an inheriting class's method implements an abstract method from a base class method.
 It is declared using the decorators:
 
 * ``abc.abstractmethod`` from the standard library, and
@@ -34,11 +34,34 @@ For example::
         def f(self):
             return 0
 
+Overriding
+==========
+*Overriding* is the pattern whereby an inheriting class's method replaces the implementation of a base class method.
+It is declared using the decorator ``overrides``, which marks the overriding method.
+
+An overriding method could call super, but does not have to::
+
+    class HasRegularMethod(AbstractBaseClass):
+
+        def f(self):
+            return 1
+
+
+    class OverridesRegularMethod(HasRegularMethod):
+
+        @overrides(HasRegularMethod)
+        def f(self):
+            return 2
+
 Augmenting
 ==========
-Augmenting is the pattern whereby an inheriting class's method calls a base class method.
-This pattern is typical in multiple inheritance whereby mixins provide additional behavior.
-It is declared using two decorators:
+*Augmenting* is a special case of *overriding* whereby the inheriting class's method not only *overrides* the base class method, but *extends* its functionality.
+This means that it must delegate to *super* in all code paths.
+This pattern is typical in multiple inheritance.
+
+We hope that Python linters will be able to check for the super call.
+
+Augmenting is declared using two decorators:
 
 * ``augments`` indicates that this method must call super within its definition and thus augments the behavior of the base class method, and
 * ``must_agugment`` indicates that child classes that define this method must decorate their method overriddes with ``augments``.
@@ -61,28 +84,9 @@ For example::
             return super().f(**kwargs) + extra
 
 
-    class AlsoAugmentsMethod(HasMustAugmentMethod):
+    class AugmentsMethodFurther(AugmentsMethod):
 
         @augments(HasMustAugmentMethod)
         def f(self, **kwargs):
             print("f has been called")
             return super().f(**kwargs)
-
-Overriding
-==========
-Overriding is the pattern whereby an inheriting class's method calls a base class method.
-This pattern indicates that the base class method is hidden (at least in some cases).
-It is declared using the decorator ``overrides``, which indicates that this is an overriding method.
-Such a method could call super, but does not have to::
-
-    class HasRegularMethod(AbstractBaseClass):
-
-        def f(self):
-            return 1
-
-
-    class OverridesRegularMethod(HasRegularMethod):
-
-        @overrides(HasRegularMethod)
-        def f(self):
-            return 2
