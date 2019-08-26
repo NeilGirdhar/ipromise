@@ -4,7 +4,8 @@ import pytest
 
 from ipromise import AbstractBaseClass
 
-from .common import HasAbstractMethod, ImplementsAbstractMethod
+from .common import (HasAbstractMethod, HasRegularMethod,
+                     ImplementsAbstractMethod)
 
 
 class D:
@@ -36,6 +37,12 @@ class E(C, D):
     pass
 
 
+class AbstractHidesAbstractOkay(HasAbstractMethod):
+    @abstractmethod
+    def f(self):
+        raise NotImplementedError
+
+
 def test_unimplmented_abstract_methods():
     with pytest.raises(TypeError):
         A()
@@ -51,20 +58,15 @@ def test_implmented_abstract_methods():
 
 def test_abstractmethod_hiding():
     with pytest.raises(TypeError):
-        class X(HasAbstractMethod):
+        class X(HasRegularMethod):
             @abstractmethod
             def f(self):
                 raise NotImplementedError
 
 
 def test_abstractmethod_hiding_by_inheritance():
-    class Y:
-        @abstractmethod
-        def f(self):
-            raise NotImplementedError
-
     with pytest.raises(TypeError):
-        class Z(Y, HasAbstractMethod):
+        class Z(HasAbstractMethod, HasRegularMethod):
             pass
 
 

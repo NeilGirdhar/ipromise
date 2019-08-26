@@ -20,7 +20,20 @@ class AbstractBaseClass:
                     abstracts.add(name)
         cls.__abstractmethods__ = frozenset(abstracts)
 
-        # Check that abstract and must_override methods do not hide methods.
+        # Check that abstract methods do not hide methods except abstract
+        # methods.
+        all_marked = {}
+        for base in cls.__mro__:
+            for name, value in vars(base).items():
+                if getattr(value, "__isabstractmethod__", False):
+                    all_marked[name] = base
+                elif name in all_marked:
+                    raise TypeError(
+                        f"When defining class {cls}, "
+                        f"method {name} in base class {all_marked[name]} "
+                        f"hides members in base class {base}")
+
+        # Check that must_augment methods do not hide methods.
         all_marked = {}
         for base in cls.__mro__:
             for name, value in vars(base).items():
@@ -30,8 +43,7 @@ class AbstractBaseClass:
                         f"method {name} in base class {all_marked[name]} "
                         f"hides members in base class {base}")
 
-                if (getattr(value, "__isabstractmethod__", False)
-                        or getattr(value, "__must_augment__", False)):
+                if getattr(value, "__must_augment__", False):
                     all_marked[name] = base
 
         # Check that for each method M implementing a method in class C:
