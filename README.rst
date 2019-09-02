@@ -1,10 +1,10 @@
-========
-ipromise
-========
+=========
+I Promise
+=========
 .. image:: https://badge.fury.io/py/ipromise.svg
     :target: https://badge.fury.io/py/ipromise
 
-A Python base class that provides various decorators for specifying promises relating to inheritance.
+This repository provides a Python base class, and various decorators for specifying promises relating to inheritance.
 It provides three inheritance patterns:
 
 * implementing,
@@ -19,7 +19,9 @@ It is declared using the decorators:
 * ``abc.abstractmethod`` from the standard library, and
 * ``implements``, which indicates that a method implements an abstract method in a base class
 
-For example::
+For example:
+
+.. code-block:: python
 
     class HasAbstractMethod(AbstractBaseClass):
 
@@ -39,7 +41,9 @@ Overriding
 *Overriding* is the pattern whereby an inheriting class's method replaces the implementation of a base class method.
 It is declared using the decorator ``overrides``, which marks the overriding method.
 
-An overriding method could call super, but does not have to::
+An overriding method could call super, but does not have to:
+
+.. code-block:: python
 
     class HasRegularMethod(AbstractBaseClass):
 
@@ -66,7 +70,9 @@ Augmenting is declared using two decorators:
 * ``augments`` indicates that this method must call super within its definition and thus augments the behavior of the base class method, and
 * ``must_agugment`` indicates that child classes that define this method must decorate their method overriddes with ``augments``.
 
-For example::
+For example:
+
+.. code-block:: python
 
     class HasMustAugmentMethod(AbstractBaseClass):
 
