@@ -13,7 +13,7 @@ setup(
         "Bug Tracker": "https://github.com/NeilGirdhar/ipromise/issues",
         "Source Code": "https://github.com/NeilGirdhar/ipromise",
     },
-    download_url = "https://pypi.python.org/pypi/ipromise",
+    download_url="https://pypi.python.org/pypi/ipromise",
     packages=find_packages(),
     classifiers=[
         "Development Status :: 5 - Production/Stable",
