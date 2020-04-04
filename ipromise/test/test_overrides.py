@@ -1,3 +1,4 @@
+# pylint: disable=unused-variable
 from abc import abstractmethod
 
 import pytest
@@ -28,7 +29,7 @@ def test_overrides_from_other_class():
     with pytest.raises(TypeError):
         class X(AbstractBaseClass):
             @overrides(HasRegularMethod)
-            def f():
+            def f(self):
                 pass
 
 

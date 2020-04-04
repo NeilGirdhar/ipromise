@@ -1,3 +1,4 @@
+# pylint: disable=unused-variable
 from abc import abstractmethod
 
 import pytest
