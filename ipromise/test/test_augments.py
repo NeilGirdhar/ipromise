@@ -1,3 +1,4 @@
+# pylint: disable=unused-variable
 import pytest
 
 from ipromise import AbstractBaseClass, augments, must_augment, overrides
