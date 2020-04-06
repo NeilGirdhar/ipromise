@@ -2,7 +2,7 @@
 name = "ipromise"
 version = "1.7"
 description = """\
-    A Python base class that provides various decorators for
+    A Python base class that provides various decorators for \
     specifying promises relating to inheritance."""
 license = "MIT"
 authors = ["Neil Girdhar <mistersheik@gmail.com>"]
