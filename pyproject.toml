@@ -1,0 +1,45 @@
+[tool.poetry]
+name = "ipromise"
+version = "1.7"
+description = """\
+    A Python base class that provides various decorators for
+    specifying promises relating to inheritance."""
+license = "MIT"
+authors = ["Neil Girdhar <mistersheik@gmail.com>"]
+readme = "README.rst"
+repository = "https://github.com/NeilGirdhar/ipromise"
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Topic :: Software Development :: Libraries :: Python Modules"
+]
+
+[tool.poetry.dependencies]
+python = "^3.6"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5"
+
+[tool.isort]
+line_lenth = 79
+known_first_party = ["cmm"]
+known_third_party = ["efax", "ipromise", "jax", "tikzify"]
+multi_line_output = 0
+not_skip = "__init__.py"
+skip_glob = [".pytype/*.py", "backup/*.py"]
+skip = [".pytype", "backup"]
+
+[tool.pycodestyle]
+max-line-length = 79
+exclude = ["__init__.py", "__pycache__"]
+
+[tool.pytest]
+
+[tool.pytype]
+disable = "ignored-abstractmethod"

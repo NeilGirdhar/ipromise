@@ -11,6 +11,10 @@ It provides three inheritance patterns:
 * overriding, and
 * augmenting.
 
+Base class
+==========
+Checking promises depends on inheritance from the base class ``AbstractBaseClass``.  Unlike the standard library's similar class ``abc.ABCMeta``, ``AbstractBaseClass`` does not bring in any metaclasses.  This is thanks to Python 3.6's PEP 487, which added ``__init_subclass__``.
+
 Implementing
 ============
 *Implementing* is the pattern whereby an inheriting class's method implements an abstract method from a base class method.
