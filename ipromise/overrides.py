@@ -1,20 +1,22 @@
+from typing import Any, Type, Callable
+
+from .annotations import Decorator, F
+
 __all__ = ['overrides']
 
 
-def overrides(interface_class):
+def overrides(interface_class: Type[Any]) -> Callable[[F], F]:
     if not isinstance(interface_class, type):
         raise TypeError(
             f"interface class {interface_class} is not a type")
 
-    def decorated_method(method):
+    def decorated_method(method: F) -> F:
         if hasattr(method, '__must_augment__'):
             raise TypeError(
-                f"{method.__name__} cannot be decorated both must_augment and "
-                "overrides")
+                f"{method.__name__} cannot be decorated both must_augment and overrides")
         if method.__name__ not in vars(interface_class):
             raise TypeError(
-                f"{method.__name__} not found in interface class "
-                f"{interface_class.__name__}")
+                f"{method.__name__} not found in interface class {interface_class.__name__}")
         bases_value = getattr(interface_class, method.__name__)
         if hasattr(bases_value, '__overrides_from__'):
             raise TypeError(
@@ -24,9 +26,8 @@ def overrides(interface_class):
                 f"class {getattr(bases_value, '__overrides_from__')}")
         if getattr(bases_value, "__isabstractmethod__", False):
             raise TypeError(
-                f"{method.__name__} is abstract in interface class "
-                f"{interface_class.__name__}")
-        method.__overrides_from__ = interface_class
+                f"{method.__name__} is abstract in interface class {interface_class.__name__}")
+        method.__overrides_from__ = interface_class  # type: ignore
         return method
 
     return decorated_method
