@@ -1,14 +1,17 @@
+from typing import FrozenSet
+
 __all__ = ['AbstractBaseClass']
 
 
 class AbstractBaseClass:
 
-    def __init_subclass__(cls):
+    __abstractmethods__: FrozenSet[str]
+
+    def __init_subclass__(cls) -> None:
         super().__init_subclass__()
 
-        # Assign the set of abstract method names to __abstractmethods__.
-        # Python will not allow the class to be instantiated if this is not
-        # empty.
+        # Assign the set of abstract method names to __abstractmethods__.  Python will not allow the
+        # class to be instantiated if this is not empty.
         abstracts = {name
                      for name, value in vars(cls).items()
                      if getattr(value, "__isabstractmethod__", False)}
@@ -20,8 +23,7 @@ class AbstractBaseClass:
                     abstracts.add(name)
         cls.__abstractmethods__ = frozenset(abstracts)
 
-        # Check that abstract methods do not hide methods except abstract
-        # methods.
+        # Check that abstract methods do not hide methods except abstract methods.
         all_marked = {}
         for base in cls.__mro__:
             for name, value in vars(base).items():
@@ -111,10 +113,9 @@ class AbstractBaseClass:
                             f"but the base class {base.__name__} already "
                             f"implements it from "
                             f"{bases_value.__implemented_from__.__name__}")
-                # M can be abstract in B even if B inherits from C since
-                # you are allowed to override abstract methods since a method
-                # can be abstract and have a reasonable definition.  For
-                # example, AbstractContextManager.__exit__.
+                # M can be abstract in B even if B inherits from C since you are allowed to override
+                # abstract methods since a method can be abstract and have a reasonable definition.
+                # For example, AbstractContextManager.__exit__.
 
         for name, value in vars(cls).items():
             if not hasattr(value, "__must_augment__"):

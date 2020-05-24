@@ -1,7 +1,11 @@
+from typing import Any, Type, Callable
+
+from .annotations import Decorator, F
+
 __all__ = ['must_augment', 'augments']
 
 
-def must_augment(method):
+def must_augment(method: F) -> F:
     if hasattr(method, '__augments_from__'):
         raise TypeError(
             f"{method.__name__} cannot be decorated both must_augment and "
@@ -10,16 +14,16 @@ def must_augment(method):
         raise TypeError(
             f"{method.__name__} cannot be decorated both must_augment and "
             "overrides")
-    method.__must_augment__ = True
+    method.__must_augment__ = True  # type: ignore
     return method
 
 
-def augments(interface_class):
+def augments(interface_class: Type[Any]) -> Callable[[F], F]:
     if not isinstance(interface_class, type):
         raise TypeError(
             f"interface class {interface_class} is not a type")
 
-    def decorated_method(method):
+    def decorated_method(method: F) -> F:
         if hasattr(method, '__must_augment__'):
             raise TypeError(
                 f"{method.__name__} cannot be decorated both augments and "
@@ -48,7 +52,7 @@ def augments(interface_class):
 #           raise TypeError(
 #               f"{method.__name__} is abstract in interface class "
 #               f"{interface_class.__name__}")
-        method.__augments_from__ = interface_class
+        method.__augments_from__ = interface_class  # type: ignore
         return method
 
     return decorated_method

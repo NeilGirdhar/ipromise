@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ipromise"
-version = "1.8"
+version = "1.9"
 description = """\
     A Python base class that provides various decorators for \
     specifying promises relating to inheritance."""
@@ -27,7 +27,7 @@ python = "^3.6"
 pytest = "^5"
 
 [tool.isort]
-line_lenth = 79
+line_lenth = 100
 known_first_party = ["cmm"]
 known_third_party = ["efax", "ipromise", "jax", "tikzify"]
 multi_line_output = 0
@@ -36,7 +36,7 @@ skip_glob = [".pytype/*.py", "backup/*.py"]
 skip = [".pytype", "backup"]
 
 [tool.pycodestyle]
-max-line-length = 79
+max-line-length = 100
 exclude = ["__init__.py", "__pycache__"]
 
 [tool.pytest]
