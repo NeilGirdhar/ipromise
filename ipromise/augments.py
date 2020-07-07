@@ -1,4 +1,4 @@
-from typing import Any, Type, Callable
+from typing import Any, Callable, Type
 
 from .annotations import Decorator, F
 

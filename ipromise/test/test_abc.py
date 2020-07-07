@@ -4,8 +4,7 @@ from abc import abstractmethod
 import pytest
 from ipromise import AbstractBaseClass
 
-from .common import (HasAbstractMethod, HasRegularMethod,
-                     ImplementsAbstractMethod)
+from .common import HasAbstractMethod, HasRegularMethod, ImplementsAbstractMethod
 
 
 class D:
