@@ -1,6 +1,6 @@
 [build-system]
-requires = ["poetry>=1.0"]
-build-backend = "poetry.masonry.api"
+requires = ['setuptools', 'poetry_core>=1.0']
+build-backend = 'poetry.core.masonry.api'
 
 [tool.poetry]
 name = "ipromise"
@@ -18,29 +18,92 @@ classifiers = [
     "Operating System :: OS Independent",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.6",
     "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
     "Topic :: Software Development :: Libraries :: Python Modules"
 ]
 
 [tool.poetry.dependencies]
-python = "^3.6"
+python = ">=3.7.2,<4.0"
 
 [tool.poetry.dev-dependencies]
-pytest = "^5"
+flake8 = '>=3.9'
+isort = '>=5.8'
+jupyter = '>=1'
+mypy = '>=0.930'
+pylint = '>=2.14'
+pyproject-flake8 = ">=0.0.1a2"
+pyright = ">=0.0.13"
+pytest = '^7'
+
+[tool.flake8]
+max-line-length = 100
+extend-ignore = "E741"
+per-file-ignores = """
+    __init__.py: F401, F403
+"""
 
 [tool.isort]
 line_length = 100
-known_first_party = ["cmm"]
-known_third_party = ["efax", "ipromise", "jax", "tikzify"]
 multi_line_output = 0
-skip_glob = [".pytype/*.py", "backup/*.py"]
-skip = [".pytype", "backup"]
+skip_glob = [".pytype/*.py"]
+
+[tool.mypy]
+check_untyped_defs = true
+disallow_any_generics = true
+disallow_incomplete_defs = true
+# disallow_untyped_calls = true
+disallow_untyped_decorators = true
+disallow_untyped_defs = true
+no_implicit_optional = true
+pretty = false
+show_error_codes = true
+show_error_context = false
+strict_equality = true
+warn_redundant_casts = true
+# warn_return_any = true
+warn_unreachable = true
+warn_unused_configs = true
+warn_unused_ignores = true
 
 [tool.pycodestyle]
 max-line-length = 100
 exclude = ["__init__.py", "__pycache__"]
+
+[tool.pylint.master]
+jobs = 0
+
+[tool.pylint.messages_control]
+disable = [
+    'abstract-method',
+    'arguments-differ',
+    'duplicate-code',
+    'invalid-name',
+    'invalid-unary-operand-type',
+    'missing-docstring',
+    'no-member',
+    'self-cls-assignment',
+    'too-few-public-methods',
+    'too-many-ancestors',
+    'too-many-arguments',
+    'too-many-branches',
+    'too-many-instance-attributes',
+    'too-many-locals',
+    'too-many-return-statements',
+    'too-many-statements',
+    'unused-argument']
+enable= [
+    'useless-suppression',
+    'use-symbolic-message-instead']
+
+[tool.pylint.reports]
+output-format = 'colorized'
+
+[tool.pylint.similarities]
+min-similarity-lines = 20
+ignore-imports = 'yes'
 
 [tool.pytest]
 

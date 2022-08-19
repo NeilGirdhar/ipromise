@@ -2,6 +2,7 @@
 from abc import abstractmethod
 
 import pytest
+
 from ipromise import AbstractBaseClass, implements, must_augment, overrides
 
 from .common import HasAbstractMethod, HasRegularMethod, ImplementsAbstractMethod
@@ -46,12 +47,12 @@ def test_overrides_and_hides() -> None:
 def test_parent_overrides_different_method() -> None:
     class Y(HasRegularMethod):
         def f(self) -> int:
-            pass
+            return 0
 
     class Z(Y):
         @overrides(Y)
         def f(self) -> int:
-            pass
+            return 0
 
     with pytest.raises(TypeError):
         class X(Z, HasRegularMethod):
