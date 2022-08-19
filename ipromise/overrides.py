@@ -30,7 +30,7 @@ def overrides(interface_class: Type[Any]) -> Callable[[F], F]:
                 f"type {type(func)}")
         if hasattr(bases_value, '__overrides_from__'):
             raise TypeError(
-                f"The method {method.__name__} @overrides a method in "
+                f"the method {method.__name__} @overrides a method in "
                 f"the interface class {interface_class.__name__}, "
                 f"but that method @overrides from a higher-level interface "
                 f"class {getattr(bases_value, '__overrides_from__')}")
