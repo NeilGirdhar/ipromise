@@ -2,13 +2,13 @@
 from abc import abstractmethod
 
 import pytest
+
 from ipromise import AbstractBaseClass, implements
 
 from .common import HasAbstractMethod, ImplementsAbstractMethod
 
 
 class AlsoHasAbstractMethod(AbstractBaseClass):
-
     @abstractmethod
     def f(self) -> int:
         raise NotImplementedError
@@ -21,7 +21,7 @@ def test_implements_interface_is_not_a_base() -> None:
         class X(HasAbstractMethod):
             @implements(AlsoHasAbstractMethod)
             def f(self) -> int:
-                pass
+                return 0
 
 
 def test_is_already_implmented_in_base() -> None:

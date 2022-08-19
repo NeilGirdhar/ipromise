@@ -1,6 +1,6 @@
 from typing import Any, Callable, Type
 
-from .annotations import Decorator, F
+from .annotations import F
 
 __all__ = ['implements']
 

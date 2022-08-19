@@ -2,13 +2,13 @@
 from typing import Any
 
 import pytest
+
 from ipromise import AbstractBaseClass, augments, must_augment, overrides
 
 from .common import HasAbstractMethod, HasRegularMethod
 
 
 class HasMustAugmentMethod(AbstractBaseClass):
-
     def __init__(self) -> None:
         self.times_f_called = 0
 
@@ -20,20 +20,16 @@ class HasMustAugmentMethod(AbstractBaseClass):
 
 
 class AugmentsMethod(HasMustAugmentMethod):
-
     @augments(HasMustAugmentMethod)
     def f(self, extra: int = 0, **kwargs: Any) -> int:
-        # https://github.com/python/mypy/issues/4001
-        return super().f(**kwargs) + extra  # type: ignore
+        return super().f(**kwargs) + extra
 
 
 class AlsoAugmentsMethod(HasMustAugmentMethod):
-
     @augments(HasMustAugmentMethod)
     def f(self, **kwargs: Any) -> int:
         print("f has been called")
-        # https://github.com/python/mypy/issues/4001
-        return super().f(**kwargs)  # type: ignore
+        return super().f(**kwargs)
 
 
 class AugmentsRegularMethod(HasRegularMethod):
