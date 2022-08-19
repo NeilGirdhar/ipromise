@@ -9,14 +9,12 @@ from .common import HasAbstractMethod, HasRegularMethod, ImplementsAbstractMetho
 
 
 class OverridesRegularMethod(HasRegularMethod):
-
     @overrides(HasRegularMethod)
     def f(self) -> int:
         return 2
 
 
 class OverridesImplementedAbstractMethod(ImplementsAbstractMethod):
-
     @overrides(ImplementsAbstractMethod)
     def f(self) -> int:
         return 1

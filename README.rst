@@ -28,14 +28,12 @@ For example:
 .. code-block:: python
 
     class HasAbstractMethod(AbstractBaseClass):
-
         @abstractmethod
         def f(self):
             raise NotImplementedError
 
 
     class ImplementsAbstractMethod(HasAbstractMethod):
-
         @implements(HasAbstractMethod)
         def f(self):
             return 0
@@ -50,13 +48,11 @@ An overriding method could call super, but does not have to:
 .. code-block:: python
 
     class HasRegularMethod(AbstractBaseClass):
-
         def f(self):
             return 1
 
 
     class OverridesRegularMethod(HasRegularMethod):
-
         @overrides(HasRegularMethod)
         def f(self):
             return 2
@@ -79,7 +75,6 @@ For example:
 .. code-block:: python
 
     class HasMustAugmentMethod(AbstractBaseClass):
-
         @must_augment
         def f(self):
             # must_augment prevents this behavior from being lost.
@@ -88,14 +83,12 @@ For example:
 
 
     class AugmentsMethod(HasMustAugmentMethod):
-
         @augments(HasMustAugmentMethod)
         def f(self, extra=0, **kwargs):
             return super().f(**kwargs) + extra
 
 
     class AugmentsMethodFurther(AugmentsMethod):
-
         @augments(HasMustAugmentMethod)
         def f(self, **kwargs):
             print("f has been called")

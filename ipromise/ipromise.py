@@ -4,7 +4,6 @@ __all__ = ['AbstractBaseClass']
 
 
 class AbstractBaseClass:
-
     __abstractmethods__: FrozenSet[str]
 
     def __init_subclass__(cls) -> None:
