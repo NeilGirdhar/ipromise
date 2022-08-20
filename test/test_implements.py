@@ -19,8 +19,8 @@ class AlsoHasAbstractMethod(AbstractBaseClass):
 def test_implements() -> None:
     class X(AlsoHasAbstractMethod):
         @implements(AlsoHasAbstractMethod)
-        def f(self):
-            pass
+        def f(self) -> int:
+            return 0
     X()
 
 

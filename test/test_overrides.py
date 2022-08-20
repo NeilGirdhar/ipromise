@@ -21,14 +21,12 @@ class OverridesImplementedAbstractMethod(ImplementsAbstractMethod):
 
 
 class AbstractBaseClassHasAbstractMethod(AbstractBaseClass):
-
     @abstractmethod
-    def f(self):
+    def f(self) -> None:
         raise NotImplementedError
 
 
 class AbstractBaseClassHasNone(AbstractBaseClass):
-
     f = None
 
 
@@ -159,7 +157,7 @@ def test_overrides_abstractmethod() -> None:
 def test_cannot_instantiate_abstract_class() -> None:
     # self test: TypeError can not instantiate abstract class
     with pytest.raises(TypeError):
-        AbstractBaseClassHasAbstractMethod()
+        AbstractBaseClassHasAbstractMethod()  # type: ignore[abstract]
 
 
 def test_cannot_implements_overrides_of_abstractmethod() -> None:
@@ -168,7 +166,7 @@ def test_cannot_implements_overrides_of_abstractmethod() -> None:
         class X(AbstractBaseClassHasAbstractMethod):
             @implements(AbstractBaseClassHasAbstractMethod)
             @overrides(AbstractBaseClassHasAbstractMethod)
-            def f(self):
+            def f(self) -> None:
                 pass
         X()
 
@@ -178,7 +176,7 @@ def test_overrides_none_method() -> None:
     with pytest.raises(TypeError):
         class X(AbstractBaseClassHasNone):
             @overrides(AbstractBaseClassHasNone)
-            def f(self):
+            def f(self) -> None:  # type: ignore[override]
                 pass
 
 
@@ -187,5 +185,5 @@ def test_overrides_no_method_notimplementederror() -> None:
     with pytest.raises(NotImplementedError):
         class X(AbstractBaseClassNoMethods):
             @overrides(AbstractBaseClassNoMethods)
-            def f(self):
+            def f(self) -> None:
                 pass
