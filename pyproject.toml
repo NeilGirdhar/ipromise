@@ -27,6 +27,7 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = ">=3.7.2,<4.0"
+restructuredtext-lint = "^1.4.0"
 
 [tool.poetry.dev-dependencies]
 flake8 = '>=3.9'
