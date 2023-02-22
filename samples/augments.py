@@ -1,5 +1,4 @@
 from ipromise import AbstractBaseClass, must_augment, augments
-import abc
 
 
 class MyClass(AbstractBaseClass):

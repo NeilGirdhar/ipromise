@@ -1,4 +1,5 @@
-from typing import Any, Callable, Type
+from typing import Any
+from collections.abc import Callable
 
 from .annotations import F
 
@@ -18,7 +19,7 @@ def must_augment(method: F) -> F:
     return method
 
 
-def augments(interface_class: Type[Any]) -> Callable[[F], F]:
+def augments(interface_class: type[Any]) -> Callable[[F], F]:
     if not isinstance(interface_class, type):
         raise TypeError(
             f"interface class {interface_class} is not a type")
@@ -38,7 +39,7 @@ def augments(interface_class: Type[Any]) -> Callable[[F], F]:
                 f"the method {method.__name__} augments a method in "
                 f"the interface class {interface_class.__name__}, "
                 f"but that method augments from a higher-level interface "
-                f"class {getattr(bases_value, '__augments_from__')}")
+                f"class {bases_value.__augments_from__}")
         # You are allowed to augment methods that are not marked must_augment
         # since we need this for augmenting the standard library.
 #       if not hasattr(bases_value, '__must_augment__'):

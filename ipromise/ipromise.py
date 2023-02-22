@@ -1,10 +1,9 @@
-from typing import FrozenSet
 
 __all__ = ['AbstractBaseClass']
 
 
 class AbstractBaseClass:
-    __abstractmethods__: FrozenSet[str]
+    __abstractmethods__: frozenset[str]
 
     def __init_subclass__(cls) -> None:
         super().__init_subclass__()
@@ -54,7 +53,7 @@ class AbstractBaseClass:
         for name, value in vars(cls).items():
             if not hasattr(value, "__implemented_from__"):
                 continue
-            interface_class = getattr(value, "__implemented_from__")
+            interface_class = value.__implemented_from__
             if not issubclass(cls, interface_class):
                 raise TypeError(
                     f"the interface class {interface_class.__name__} "
@@ -77,7 +76,7 @@ class AbstractBaseClass:
         for name, value in vars(cls).items():
             if not hasattr(value, "__overrides_from__"):
                 continue
-            interface_class = getattr(value, "__overrides_from__")
+            interface_class = value.__overrides_from__
             if not issubclass(cls, interface_class):
                 raise TypeError(f"Interface class {interface_class.__name__} "
                                 f"is not a base class of {cls.__name__}")

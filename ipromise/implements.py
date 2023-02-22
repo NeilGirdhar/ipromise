@@ -1,11 +1,12 @@
-from typing import Any, Callable, Type
+from typing import Any
+from collections.abc import Callable
 
 from .annotations import F
 
 __all__ = ['implements']
 
 
-def implements(interface_class: Type[Any]) -> Callable[[F], F]:
+def implements(interface_class: type[Any]) -> Callable[[F], F]:
 
     if not isinstance(interface_class, type):
         raise TypeError(

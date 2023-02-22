@@ -1,11 +1,12 @@
-from typing import Any, Callable, Type
+from typing import Any
+from collections.abc import Callable
 
 from .annotations import F
 
 __all__ = ['overrides']
 
 
-def overrides(interface_class: Type[Any]) -> Callable[[F], F]:
+def overrides(interface_class: type[Any]) -> Callable[[F], F]:
     if not isinstance(interface_class, type):
         raise TypeError(
             f"interface class {interface_class} is not a type")
@@ -32,7 +33,7 @@ def overrides(interface_class: Type[Any]) -> Callable[[F], F]:
                 f"method {method.__name__} overrides a method in "
                 f"the interface class {interface_class.__name__}, "
                 f"but that method overrides from a higher-level interface "
-                f"class {getattr(bases_value, '__overrides_from__')}")
+                f"class {bases_value.__overrides_from__}")
         if getattr(bases_value, "__isabstractmethod__", False):
             raise TypeError(
                 f"method {method.__name__} is abstract in interface class "

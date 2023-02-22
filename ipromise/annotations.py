@@ -1,6 +1,7 @@
-from typing import Any, Callable, List, TypeVar
+from typing import Any, TypeVar
+from collections.abc import Callable
 
-__all__: List[str] = []
+__all__: list[str] = []
 
 
 F = TypeVar('F', bound=Callable[..., Any])
